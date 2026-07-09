@@ -6,7 +6,12 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().min(1),
     CORS_ORIGIN: z.url(),
-    NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+    MASTRA_STUDIO_URL: z.url(),
+    GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1),
+    GOOGLE_API_KEY: z.string().min(1),
+    NODE_ENV: z
+      .enum(["development", "production", "test"])
+      .default("development"),
   },
   runtimeEnv: process.env,
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

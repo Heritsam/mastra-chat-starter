@@ -28,6 +28,7 @@
     "check-types": "turbo run check-types",
     "dev:web": "turbo run dev -F web",
     "dev:server": "turbo run dev -F server",
+    "mastra:studio": "turbo run mastra -F server",
     "db:push": "turbo run db:push -F @agent-ts/db",
     "db:studio": "turbo run db:studio -F @agent-ts/db",
     "db:generate": "turbo run db:generate -F @agent-ts/db",
@@ -36,6 +37,7 @@
   },
   "dependencies": {
     "@agent-ts/env": "workspace:*",
+    "@scalar/hono-api-reference": "^0.11.8",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },

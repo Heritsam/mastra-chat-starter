@@ -1,12 +1,19 @@
-import { Toaster } from "@agent-ts/ui/components/sonner";
-import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
+import type { QueryClient } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import {
+  createRootRouteWithContext,
+  HeadContent,
+  Outlet,
+  Scripts,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-
-import Header from "../components/header";
-
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "../index.css?url";
 
-export interface RouterAppContext {}
+export type RouterAppContext = {
+  queryClient: QueryClient;
+};
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
@@ -34,19 +41,23 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootDocument() {
+  const { queryClient } = Route.useRouteContext();
+
   return (
     <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
       <body>
-        <div className="grid h-svh grid-rows-[auto_1fr]">
-          <Header />
-          <Outlet />
-        </div>
-        <Toaster richColors />
-        <TanStackRouterDevtools position="bottom-left" />
-        <Scripts />
+        <QueryClientProvider client={queryClient}>
+          <SidebarProvider>
+            <Outlet />
+          </SidebarProvider>
+
+          <Toaster richColors />
+          <TanStackRouterDevtools position="bottom-right" />
+          <Scripts />
+        </QueryClientProvider>
       </body>
     </html>
   );
