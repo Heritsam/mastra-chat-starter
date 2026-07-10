@@ -14,25 +14,47 @@ export const getWeatherTool = createTool({
   id: "get-weather",
   description: "Get the current weather for a given city.",
   inputSchema: z.object({
-    city: z.string().describe("The city to get the weather for"),
+    location: z
+      .string()
+      .describe(
+        "City name or location string to query weather for, e.g. 'Bogor, Indonesia' or 'Edinburgh'.",
+      ),
   }),
   outputSchema: z.object({
-    city: z.string(),
-    temperatureC: z.number(),
-    condition: z.string(),
-    humidity: z.number(),
-    windKph: z.number(),
+    location: z.string().describe("The location that was queried."),
+    weather: z
+      .string()
+      .nullable()
+      .describe(
+        "Weather summary string from wttr.in (format: 'City: condition temp'). Null on error.",
+      ),
+    error: z
+      .string()
+      .nullable()
+      .describe("Error message if the request failed, null on success."),
   }),
-  execute: async ({ city }) => {
-    // Deterministic pseudo-random values derived from the city name so the
-    // same city always returns the same "weather" during testing.
-    const seed = [...city].reduce((acc, ch) => acc + ch.charCodeAt(0), 0);
-    return {
-      city,
-      temperatureC: 8 + (seed % 22),
-      condition: CONDITIONS[seed % CONDITIONS.length] ?? "sunny",
-      humidity: 40 + (seed % 55),
-      windKph: 3 + (seed % 28),
-    };
+  execute: async ({ location }) => {
+    try {
+      const response = await fetch(
+        `https://wttr.in/${encodeURIComponent(location)}?format=3`,
+      );
+
+      if (!response.ok) {
+        return {
+          location,
+          weather: null,
+          error: `Weather service returned HTTP ${response.status}`,
+        };
+      }
+
+      const weather = await response.text();
+      return { location, weather: weather.trim(), error: null };
+    } catch (err) {
+      return {
+        location,
+        weather: null,
+        error: err instanceof Error ? err.message : "Unknown error",
+      };
+    }
   },
 });

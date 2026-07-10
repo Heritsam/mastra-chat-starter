@@ -11,7 +11,7 @@ export const weatherAgent = new Agent({
   id: "weatherAgent",
   name: "Weather Agent",
   instructions,
-  model: google("gemini-2.5-flash"),
+  model: google("gemini-3.5-flash"),
   tools: { getWeatherTool, getCurrentLocation, suggestActivities },
   memory: new Memory({
     options: {
