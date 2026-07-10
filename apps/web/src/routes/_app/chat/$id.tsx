@@ -5,6 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useMemo, useState } from "react";
 import { ChatInput } from "@/components/chat/chat-input";
+import { ErrorBubble } from "@/components/chat/error-bubble";
 import { MessageView } from "@/components/chat/message-view";
 import { PendingBubble } from "@/components/chat/pending-bubble";
 import {
@@ -53,7 +54,7 @@ function ChatThread({ threadId }: { threadId: string }) {
     [threadId, resourceId, agentId],
   );
 
-  const { messages, sendMessage, status, stop } = useChat({
+  const { messages, sendMessage, status, stop, error, regenerate } = useChat({
     id: threadId,
     messages: initialMessages,
     transport,
@@ -61,6 +62,9 @@ function ChatThread({ threadId }: { threadId: string }) {
       queryClient.invalidateQueries({
         queryKey: ["threads", agentId, resourceId],
       });
+    },
+    onError: (err) => {
+      console.error("Chat stream error:", err);
     },
   });
 
@@ -104,6 +108,11 @@ function ChatThread({ threadId }: { threadId: string }) {
               {status === "submitted" && (
                 <MessageScrollerItem messageId="pending">
                   <PendingBubble />
+                </MessageScrollerItem>
+              )}
+              {status === "error" && error && (
+                <MessageScrollerItem messageId="error">
+                  <ErrorBubble error={error} onRetry={() => regenerate()} />
                 </MessageScrollerItem>
               )}
             </MessageScrollerContent>
