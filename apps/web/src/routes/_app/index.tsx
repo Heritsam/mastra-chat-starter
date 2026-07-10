@@ -25,14 +25,15 @@ function NewChatPage() {
       to: "/chat/$id",
       params: { id: threadId },
       search: (prev) => prev,
+      viewTransition: true,
     });
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-2 px-4 pb-12">
+    <div className="fade-in-0 slide-in-from-bottom-1 mx-auto flex w-full max-w-3xl flex-1 animate-in flex-col items-center justify-center gap-2 px-4 pb-12 duration-200">
       <ChatEmptyState onSuggestion={setInput} />
 
-      <div className="w-full">
+      <div className="w-full [view-transition-name:chat-input]">
         <ChatInput
           onChange={setInput}
           onStop={() => {}}

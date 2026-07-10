@@ -74,7 +74,10 @@ export function MessageView({
             )}
 
             {textParts.map((part, index) => (
-              <Response key={`${message.id}-text-${index}`}>
+              <Response
+                isStreaming={isStreaming}
+                key={`${message.id}-text-${index}`}
+              >
                 {part.text}
               </Response>
             ))}

@@ -3,7 +3,6 @@ import {
   CloudLightning,
   Loader2Icon,
   MessageCircle,
-  MessageSquareIcon,
   MoreHorizontalIcon,
   PencilIcon,
   Trash2Icon,
@@ -80,7 +79,7 @@ export default function ThreadList() {
 
       {status === "error" && (
         <SidebarMenuItem>
-          <span className="flex gap-2 px-3 py-1.5 text-rose-400">
+          <span className="flex items-center gap-2 px-3 py-1.5 text-rose-400">
             <CloudLightning className="size-4" />
             Failed to load chats
           </span>

@@ -25,7 +25,7 @@ export function AppSidebar() {
           New chat
         </Button>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="scroll-fade-y">
         <SidebarGroup>
           <SidebarGroupLabel>Recent</SidebarGroupLabel>
 

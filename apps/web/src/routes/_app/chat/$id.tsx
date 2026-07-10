@@ -95,7 +95,7 @@ function ChatThread({ threadId }: { threadId: string }) {
                   key={message.id}
                   messageId={message.id}
                   scrollAnchor={message.role === "user"}
-                  className="animate-in"
+                  className="fade-in-0 slide-in-from-bottom-1 animate-in duration-200"
                 >
                   <MessageView
                     isStreaming={
@@ -121,7 +121,7 @@ function ChatThread({ threadId }: { threadId: string }) {
         </MessageScroller>
       </MessageScrollerProvider>
 
-      <div className="mx-auto w-full max-w-3xl shrink-0 px-4 pb-4">
+      <div className="mx-auto w-full max-w-3xl shrink-0 px-4 pb-4 [view-transition-name:chat-input]">
         <ChatInput
           onChange={setInput}
           onStop={stop}
