@@ -1,4 +1,4 @@
-import { env } from "@agent-ts/env/server";
+import { env } from "@repo/env/server";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { MastraServer } from "@mastra/hono";
 import { Scalar } from "@scalar/hono-api-reference";

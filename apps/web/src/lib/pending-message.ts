@@ -1,4 +1,4 @@
-const prefix = "agent-ts:pending-message:";
+const prefix = "mastra-chat-starter:pending-message:";
 
 export function setPendingMessage(threadId: string, text: string) {
   sessionStorage.setItem(prefix + threadId, text);

@@ -1,5 +1,5 @@
 {
-  "name": "@agent-ts/db",
+  "name": "@repo/db",
   "type": "module",
   "exports": {
     ".": {
@@ -16,14 +16,14 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
-    "@agent-ts/env": "workspace:*",
+    "@repo/env": "workspace:*",
     "@neondatabase/serverless": "^1.0.2",
     "dotenv": "catalog:",
     "drizzle-orm": "^0.45.1",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@agent-ts/config": "workspace:*",
+    "@repo/config": "workspace:*",
     "drizzle-kit": "^0.31.8",
     "typescript": "catalog:"
   }

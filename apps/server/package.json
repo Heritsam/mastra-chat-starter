@@ -11,8 +11,8 @@
     "start": "bun run dist/index.mjs"
   },
   "dependencies": {
-    "@agent-ts/db": "workspace:*",
-    "@agent-ts/env": "workspace:*",
+    "@repo/db": "workspace:*",
+    "@repo/env": "workspace:*",
     "@ai-sdk/google": "^4.0.8",
     "@hono/zod-openapi": "^1.4.0",
     "@mastra/ai-sdk": "^1.6.1",
@@ -28,7 +28,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@agent-ts/config": "workspace:*",
+    "@repo/config": "workspace:*",
     "@types/bun": "catalog:",
     "concurrently": "^9.1.0",
     "tsdown": "^0.21.9",

@@ -1,15 +1,6 @@
 import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 
-const CONDITIONS = [
-  "clear skies",
-  "scattered clouds",
-  "light rain",
-  "thunderstorms",
-  "foggy",
-  "sunny",
-] as const;
-
 export const getWeatherTool = createTool({
   id: "get-weather",
   description: "Get the current weather for a given city.",

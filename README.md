@@ -1,4 +1,4 @@
-# agent-ts
+# mastra-chat-starter
 
 This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, TanStack Start, Hono, and more.
 
@@ -74,7 +74,7 @@ import { Button } from "@/components/ui/button";
 ## Project Structure
 
 ```
-agent-ts/
+mastra-chat-starter/
 ├── apps/
 │   ├── web/         # Frontend application (React + TanStack Start)
 │   └── server/      # Backend API (Hono)

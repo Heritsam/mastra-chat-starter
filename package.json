@@ -1,5 +1,5 @@
 {
-  "name": "agent-ts",
+  "name": "mastra-chat-starter",
   "private": true,
   "workspaces": {
     "packages": [
@@ -29,20 +29,20 @@
     "dev:web": "turbo run dev -F web",
     "dev:server": "turbo run dev -F server",
     "mastra:studio": "turbo run mastra -F server",
-    "db:push": "turbo run db:push -F @agent-ts/db",
-    "db:studio": "turbo run db:studio -F @agent-ts/db",
-    "db:generate": "turbo run db:generate -F @agent-ts/db",
-    "db:migrate": "turbo run db:migrate -F @agent-ts/db",
+    "db:push": "turbo run db:push -F @repo/db",
+    "db:studio": "turbo run db:studio -F @repo/db",
+    "db:generate": "turbo run db:generate -F @repo/db",
+    "db:migrate": "turbo run db:migrate -F @repo/db",
     "check": "biome check --write ."
   },
   "dependencies": {
-    "@agent-ts/env": "workspace:*",
+    "@repo/env": "workspace:*",
     "@scalar/hono-api-reference": "^0.11.8",
     "dotenv": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@agent-ts/config": "workspace:*",
+    "@repo/config": "workspace:*",
     "@biomejs/biome": "^2.4.16",
     "@types/bun": "catalog:",
     "turbo": "^2.10.2",

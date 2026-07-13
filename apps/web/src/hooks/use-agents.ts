@@ -1,4 +1,4 @@
-import { env } from "@agent-ts/env/web";
+import { env } from "@repo/env/web";
 import { useQuery } from "@tanstack/react-query";
 
 export type MastraAgent = {

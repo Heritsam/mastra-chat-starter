@@ -1,4 +1,4 @@
-import { env } from "@agent-ts/env/web";
+import { env } from "@repo/env/web";
 import { queryOptions } from "@tanstack/react-query";
 import type { UIMessage } from "ai";
 

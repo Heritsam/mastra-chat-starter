@@ -1,4 +1,4 @@
-const storageKey = "agent-ts:resource-id";
+const storageKey = "mastra-chat-starter:resource-id";
 
 export function getOrCreateResourceId(): string {
   const existing = localStorage.getItem(storageKey);
