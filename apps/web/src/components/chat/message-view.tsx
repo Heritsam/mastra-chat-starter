@@ -1,10 +1,12 @@
 import type { DynamicToolUIPart, ToolUIPart, UIMessage } from "ai";
-
+import { Copy, ThumbsDown, ThumbsUp } from "lucide-react";
 import { MessageInspector } from "@/components/chat/message-inspector";
 import { Response } from "@/components/chat/response";
 import { TextShimmer } from "@/components/loading-ui/text-shimmer";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
 import { Message, MessageContent } from "@/components/ui/message";
+import { Button } from "../ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 type MessagePart = UIMessage["parts"][number];
 type ToolPart = ToolUIPart | DynamicToolUIPart;
@@ -65,7 +67,7 @@ export function MessageView({
 
   // agent
   return (
-    <Message align="start">
+    <Message align="start" className="group">
       <MessageContent>
         <Bubble variant="ghost">
           <BubbleContent className="flex flex-col gap-2">
@@ -88,6 +90,35 @@ export function MessageView({
                   ? `Running ${toolName(runningTool)}…`
                   : "Thinking…"}
               </TextShimmer>
+            )}
+
+            {hasText && !isStreaming && (
+              <div className="flex">
+                <Tooltip>
+                  <TooltipTrigger
+                    render={<Button variant="ghost" size="icon-sm" />}
+                  >
+                    <Copy className="size-4 text-transparent transition-colors group-hover:text-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>Copy</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={<Button variant="ghost" size="icon-sm" />}
+                  >
+                    <ThumbsUp className="size-4 text-transparent transition-colors group-hover:text-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>Good response</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={<Button variant="ghost" size="icon-sm" />}
+                  >
+                    <ThumbsDown className="size-4 text-transparent transition-colors group-hover:text-foreground" />
+                  </TooltipTrigger>
+                  <TooltipContent>Bad response</TooltipContent>
+                </Tooltip>
+              </div>
             )}
           </BubbleContent>
         </Bubble>

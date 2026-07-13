@@ -14,7 +14,7 @@ export function ErrorBubble({
   return (
     <Message align="start">
       <MessageContent>
-        <Bubble variant="destructive">
+        <Bubble variant="ghost">
           <BubbleContent className="flex flex-col gap-2">
             <p>
               Something went wrong while generating a response

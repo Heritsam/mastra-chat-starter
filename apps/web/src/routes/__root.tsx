@@ -9,6 +9,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import appCss from "../index.css?url";
 
 export type RouterAppContext = {
@@ -50,13 +51,15 @@ function RootDocument() {
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
-          <SidebarProvider>
-            <Outlet />
-          </SidebarProvider>
+          <TooltipProvider>
+            <SidebarProvider>
+              <Outlet />
+            </SidebarProvider>
 
-          <Toaster richColors />
-          <TanStackRouterDevtools position="bottom-right" />
-          <Scripts />
+            <Toaster richColors />
+            <TanStackRouterDevtools position="bottom-right" />
+            <Scripts />
+          </TooltipProvider>
         </QueryClientProvider>
       </body>
     </html>
