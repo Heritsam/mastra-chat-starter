@@ -13,12 +13,8 @@ type ListThreadsResponse = {
   threads: MastraThread[];
 };
 
-function threadsUrl(agentId: string) {
-  return `${env.VITE_SERVER_URL}/api/memory/threads?agentId=${encodeURIComponent(agentId)}`;
-}
-
-function threadUrl(agentId: string, threadId: string) {
-  return `${env.VITE_SERVER_URL}/api/memory/threads/${encodeURIComponent(threadId)}?agentId=${encodeURIComponent(agentId)}`;
+function threadUrl(threadId: string) {
+  return `${env.VITE_SERVER_URL}/api/memory/threads/${encodeURIComponent(threadId)}`;
 }
 
 const titleGenerationWindowMs = 2 * 60 * 1000;
@@ -30,12 +26,12 @@ function isAwaitingGeneratedTitle(thread: MastraThread) {
   );
 }
 
-export function useThreads(agentId: string, resourceId: string) {
+export function useThreads(resourceId: string) {
   return useQuery({
-    queryKey: ["threads", agentId, resourceId],
+    queryKey: ["threads", resourceId],
     queryFn: async () => {
       const response = await fetch(
-        `${threadsUrl(agentId)}&resourceId=${encodeURIComponent(resourceId)}`,
+        `${env.VITE_SERVER_URL}/api/memory/threads?resourceId=${encodeURIComponent(resourceId)}`,
       );
 
       if (!response.ok) {
@@ -60,7 +56,7 @@ export function useThreads(agentId: string, resourceId: string) {
   });
 }
 
-export function useRenameThread(agentId: string, resourceId: string) {
+export function useRenameThread(resourceId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -71,7 +67,7 @@ export function useRenameThread(agentId: string, resourceId: string) {
       threadId: string;
       title: string;
     }) => {
-      const response = await fetch(threadUrl(agentId, threadId), {
+      const response = await fetch(threadUrl(threadId), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title }),
@@ -87,19 +83,19 @@ export function useRenameThread(agentId: string, resourceId: string) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["threads", agentId, resourceId],
+        queryKey: ["threads", resourceId],
       });
     },
   });
 }
 
-export function useDeleteThread(agentId: string, resourceId: string) {
+export function useDeleteThread(resourceId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (threadId: string) => {
       const response = await fetch(
-        `${threadUrl(agentId, threadId)}&resourceId=${encodeURIComponent(resourceId)}`,
+        `${threadUrl(threadId)}&resourceId=${encodeURIComponent(resourceId)}`,
         { method: "DELETE" },
       );
 
@@ -113,7 +109,7 @@ export function useDeleteThread(agentId: string, resourceId: string) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["threads", agentId, resourceId],
+        queryKey: ["threads", resourceId],
       });
     },
   });

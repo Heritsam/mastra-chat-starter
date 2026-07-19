@@ -8,7 +8,6 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import { useState } from "react";
-import { useAgentId } from "@/hooks/use-agent-id";
 import { useResourceId } from "@/hooks/use-resource-id";
 import {
   type MastraThread,
@@ -41,15 +40,14 @@ import {
 import { Skeleton } from "../ui/skeleton";
 
 export default function ThreadList() {
-  const agentId = useAgentId();
   const resourceId = useResourceId();
   const navigate = useNavigate({ from: "/" });
   const match = useMatch({ from: "/_app/chat/$id", shouldThrow: false });
   const selectedThreadId = match?.params.id;
 
-  const { data: threads, status } = useThreads(agentId, resourceId);
-  const renameThread = useRenameThread(agentId, resourceId);
-  const deleteThread = useDeleteThread(agentId, resourceId);
+  const { data: threads, status } = useThreads(resourceId);
+  const renameThread = useRenameThread(resourceId);
+  const deleteThread = useDeleteThread(resourceId);
 
   const handleDelete = (threadId: string) => {
     deleteThread.mutate(threadId);
