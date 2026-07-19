@@ -2,7 +2,6 @@ import { Link, useMatch, useNavigate } from "@tanstack/react-router";
 import {
   CloudLightning,
   Loader2Icon,
-  MessageCircle,
   MoreHorizontalIcon,
   PencilIcon,
   Trash2Icon,
@@ -127,7 +126,7 @@ function ThreadRow({
           />
         }
       >
-        <MessageCircle />
+        {/*<MessageCircle />*/}
         <span
           key={thread.title ?? "untitled"}
           className="truncate opacity-100 starting:opacity-0 transition-opacity duration-200 ease-out motion-reduce:duration-0"

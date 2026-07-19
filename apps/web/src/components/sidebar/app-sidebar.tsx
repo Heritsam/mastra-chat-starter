@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { PlusIcon } from "lucide-react";
+import { MessageCirclePlus } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Sidebar,
@@ -19,9 +19,10 @@ export function AppSidebar() {
       <SidebarHeader>
         <Button
           className="w-full cursor-default"
+          variant="outline"
           render={<Link from="/" to="/" search={(prev) => prev} />}
         >
-          <PlusIcon data-icon="inline-start" />
+          <MessageCirclePlus data-icon="inline-start" />
           New chat
         </Button>
       </SidebarHeader>
