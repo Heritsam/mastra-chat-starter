@@ -49,7 +49,12 @@ function ChatThread({ threadId }: { threadId: string }) {
     () =>
       new DefaultChatTransport({
         api: `${env.VITE_SERVER_URL}/chat/${agentId}`,
-        body: { memory: { thread: threadId, resource: resourceId } },
+        prepareSendMessagesRequest: ({ messages }) => ({
+          body: {
+            messages: [messages[messages.length - 1]],
+            memory: { thread: threadId, resource: resourceId },
+          },
+        }),
       }),
     [threadId, resourceId, agentId],
   );
