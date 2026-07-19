@@ -44,12 +44,13 @@ export function ChatEmptyState({
       </EmptyHeader>
       <EmptyContent className="mt-2 max-w-xl">
         <div className="flex flex-wrap justify-center gap-2">
-          {SUGGESTIONS.map((suggestion) => (
+          {SUGGESTIONS.map((suggestion, index) => (
             <Button
-              className="rounded-full"
+              className="fade-in-0 slide-in-from-bottom-1 animate-in rounded-full fill-mode-both duration-300"
               key={suggestion}
               onClick={() => onSuggestion(suggestion)}
               size="sm"
+              style={{ animationDelay: `${index * 40}ms` }}
               type="button"
               variant="outline"
             >

@@ -128,7 +128,12 @@ function ThreadRow({
         }
       >
         <MessageCircle />
-        <span className="truncate">{thread.title || "New chat"}</span>
+        <span
+          key={thread.title ?? "untitled"}
+          className="truncate opacity-100 starting:opacity-0 transition-opacity duration-200 ease-out motion-reduce:duration-0"
+        >
+          {thread.title || "New chat"}
+        </span>
       </SidebarMenuButton>
 
       <DropdownMenu>

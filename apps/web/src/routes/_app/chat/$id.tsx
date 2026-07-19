@@ -106,12 +106,18 @@ function ChatThread({ threadId }: { threadId: string }) {
                 </MessageScrollerItem>
               ))}
               {status === "submitted" && (
-                <MessageScrollerItem messageId="pending">
+                <MessageScrollerItem
+                  messageId="pending"
+                  className="fade-in-0 slide-in-from-bottom-1 animate-in duration-200"
+                >
                   <PendingBubble />
                 </MessageScrollerItem>
               )}
               {status === "error" && error && (
-                <MessageScrollerItem messageId="error">
+                <MessageScrollerItem
+                  messageId="error"
+                  className="fade-in-0 slide-in-from-bottom-1 animate-in duration-200"
+                >
                   <ErrorBubble error={error} onRetry={() => regenerate()} />
                 </MessageScrollerItem>
               )}
