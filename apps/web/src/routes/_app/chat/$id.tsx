@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/message-scroller";
 import { useResourceId } from "@/hooks/use-resource-id";
 import { threadMessagesQueryOptions } from "@/hooks/use-thread-messages";
+import { toFileList } from "@/lib/file-list";
+import { takePendingFiles } from "@/lib/pending-files";
 import { takePendingMessage } from "@/lib/pending-message";
 
 export const Route = createFileRoute("/_app/chat/$id")({
@@ -44,6 +46,7 @@ function ChatThread({ threadId }: { threadId: string }) {
   const resourceId = useResourceId();
   const queryClient = useQueryClient();
   const [input, setInput] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
 
   const transport = useMemo(
     () =>
@@ -75,18 +78,26 @@ function ChatThread({ threadId }: { threadId: string }) {
 
   useEffect(() => {
     const pending = takePendingMessage(threadId);
-    if (pending) {
-      sendMessage({ text: pending });
+    const pendingFiles = takePendingFiles(threadId);
+    if (pending || pendingFiles.length > 0) {
+      sendMessage(
+        pendingFiles.length > 0
+          ? { text: pending ?? "", files: toFileList(pendingFiles) }
+          : { text: pending ?? "" },
+      );
     }
   }, [threadId, sendMessage]);
 
   const handleSubmit = () => {
     const text = input.trim();
-    if (!text) {
+    if (!text && files.length === 0) {
       return;
     }
-    sendMessage({ text });
+    sendMessage(
+      files.length > 0 ? { text, files: toFileList(files) } : { text },
+    );
     setInput("");
+    setFiles([]);
   };
 
   return (
@@ -94,7 +105,7 @@ function ChatThread({ threadId }: { threadId: string }) {
       <MessageScrollerProvider autoScroll>
         <MessageScroller className="flex-1">
           <MessageScrollerViewport>
-            <MessageScrollerContent className="mx-auto w-full max-w-3xl px-4 pt-6 pb-10">
+            <MessageScrollerContent className="mx-auto w-full max-w-3xl px-4 pt-8 pb-10">
               {messages.map((message, index) => (
                 <MessageScrollerItem
                   key={message.id}
@@ -134,7 +145,12 @@ function ChatThread({ threadId }: { threadId: string }) {
 
       <div className="mx-auto w-full max-w-3xl shrink-0 px-4 pb-4 [view-transition-name:chat-input]">
         <ChatInput
+          attachments={files}
+          onAttach={(newFiles) => setFiles((prev) => [...prev, ...newFiles])}
           onChange={setInput}
+          onRemoveAttachment={(index) =>
+            setFiles((prev) => prev.filter((_, i) => i !== index))
+          }
           onStop={stop}
           onSubmit={handleSubmit}
           status={status}

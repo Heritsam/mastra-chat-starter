@@ -1,6 +1,6 @@
 import type { ChatStatus } from "ai";
-import { ArrowUpIcon, SquareIcon } from "lucide-react";
-import { type KeyboardEvent, useLayoutEffect, useRef, useState } from "react";
+import { ArrowUpIcon, PaperclipIcon, SquareIcon, XIcon } from "lucide-react";
+import { type KeyboardEvent, useRef } from "react";
 
 import {
   InputGroup,
@@ -9,9 +9,6 @@ import {
   InputGroupTextarea,
 } from "@/components/ui/input-group";
 import { Spinner } from "@/components/ui/spinner";
-import { cn } from "@/lib/utils";
-
-const MAX_TEXTAREA_HEIGHT = 160;
 
 export function ChatInput({
   value,
@@ -19,39 +16,22 @@ export function ChatInput({
   onSubmit,
   onStop,
   status,
+  attachments = [],
+  onAttach,
+  onRemoveAttachment,
 }: {
   value: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
   onStop: () => void;
   status: ChatStatus;
+  attachments?: File[];
+  onAttach?: (files: File[]) => void;
+  onRemoveAttachment?: (index: number) => void;
 }) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [isMultiline, setIsMultiline] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const isBusy = status === "submitted" || status === "streaming";
-  const canSubmit = value.trim().length > 0;
-
-  useLayoutEffect(() => {
-    const textarea = textareaRef.current;
-    if (!textarea) {
-      return;
-    }
-
-    textarea.style.height = "auto";
-
-    const nextHeight = Math.min(textarea.scrollHeight, MAX_TEXTAREA_HEIGHT);
-    textarea.style.height = `${nextHeight}px`;
-    textarea.style.overflowY =
-      textarea.scrollHeight > MAX_TEXTAREA_HEIGHT ? "auto" : "hidden";
-
-    const styles = window.getComputedStyle(textarea);
-    const singleLineHeight =
-      Number.parseFloat(styles.lineHeight) +
-      Number.parseFloat(styles.paddingTop) +
-      Number.parseFloat(styles.paddingBottom);
-
-    setIsMultiline(textarea.scrollHeight > Math.ceil(singleLineHeight) + 1);
-  });
+  const canSubmit = value.trim().length > 0 || attachments.length > 0;
 
   const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -73,23 +53,63 @@ export function ChatInput({
 
   return (
     <form onSubmit={handleSubmit}>
-      <InputGroup
-        className={cn(
-          "rounded-full border-border bg-card shadow-xs has-[textarea]:rounded-full",
-          isMultiline && "rounded-lg has-[textarea]:rounded-lg",
-        )}
-      >
+      {attachments.length > 0 && (
+        <ul className="mb-2 flex flex-wrap gap-1.5">
+          {attachments.map((file, index) => (
+            <li
+              key={`${file.name}-${index}`}
+              className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-1.5 text-xs"
+            >
+              <span className="max-w-40 truncate font-medium">{file.name}</span>
+              <button
+                className="text-muted-foreground hover:text-foreground"
+                onClick={() => onRemoveAttachment?.(index)}
+                type="button"
+              >
+                <XIcon className="size-3" />
+                <span className="sr-only">Remove {file.name}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <InputGroup className="rounded-2xl border-border bg-card shadow-xs">
         <InputGroupTextarea
-          className="ml-2 max-h-40 min-h-0 leading-6"
+          className="h-14 min-h-14 overflow-hidden px-4 py-3.5"
           onChange={(event) => onChange(event.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Ask about anything"
-          ref={textareaRef}
-          rows={1}
           value={value}
           autoFocus
         />
-        <InputGroupAddon align={isMultiline ? "block-end" : "inline-end"}>
+        <InputGroupAddon align="block-end">
+          {onAttach && (
+            <>
+              <input
+                className="hidden"
+                multiple
+                onChange={(event) => {
+                  const files = Array.from(event.target.files ?? []);
+                  if (files.length > 0) {
+                    onAttach(files);
+                  }
+                  event.target.value = "";
+                }}
+                ref={fileInputRef}
+                type="file"
+              />
+              <InputGroupButton
+                onClick={() => fileInputRef.current?.click()}
+                size="icon-sm"
+                type="button"
+                variant="ghost"
+              >
+                <PaperclipIcon />
+                <span className="sr-only">Attach files</span>
+              </InputGroupButton>
+            </>
+          )}
           <InputGroupButton
             className="ml-auto"
             disabled={!isBusy && !canSubmit}
