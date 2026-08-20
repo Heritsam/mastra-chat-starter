@@ -1,5 +1,5 @@
 import { chatRoute } from "@mastra/ai-sdk";
-import { toAISdkV5Messages } from "@mastra/ai-sdk/ui";
+import { toAISdkMessages } from "@mastra/ai-sdk/ui";
 import { Mastra } from "@mastra/core/mastra";
 import { registerApiRoute } from "@mastra/core/server";
 import { MastraCompositeStore } from "@mastra/core/storage";
@@ -11,23 +11,11 @@ import {
   SensitiveDataFilter,
 } from "@mastra/observability";
 import { HTTPException } from "hono/http-exception";
-import { weatherAgent } from "./agents/weather-agent";
-import {
-  completenessScorer,
-  toolCallAppropriatenessScorer,
-  translationScorer,
-} from "./scorers/weather-scorer";
+import { threadlineAnalystAgent } from "./agents/threadline-analyst-agent";
 import { duckdbStorage, postgresStorage } from "./storage";
-import { weatherWorkflow } from "./workflows/weather-workflow";
 
 export const mastra = new Mastra({
-  workflows: { weatherWorkflow },
-  agents: { weatherAgent },
-  scorers: {
-    toolCallAppropriatenessScorer,
-    completenessScorer,
-    translationScorer,
-  },
+  agents: { threadlineAnalystAgent },
   storage: new MastraCompositeStore({
     id: "composite-storage",
     default: postgresStorage,
@@ -43,6 +31,7 @@ export const mastra = new Mastra({
     apiRoutes: [
       chatRoute({
         path: "/chat/:agentId",
+        version: "v7",
         sendReasoning: true,
         defaultOptions: {
           providerOptions: {
@@ -83,7 +72,9 @@ export const mastra = new Mastra({
             perPage: false,
           });
 
-          return c.json({ uiMessages: toAISdkV5Messages(messages) });
+          return c.json({
+            uiMessages: toAISdkMessages(messages, { version: "v7" }),
+          });
         },
       }),
     ],

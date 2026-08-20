@@ -8,15 +8,14 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { useAgentId } from "@/hooks/use-agent-id";
-import { useAgents } from "@/hooks/use-agents";
+import { agentName } from "@/lib/agent";
 import { Button } from "../ui/button";
 
 const SUGGESTIONS = [
-  "What's the weather in Tokyo?",
-  "Is it raining in London?",
-  "Compare weather in Paris and Rome",
-  "Should I bring an umbrella in Seattle?",
+  "What were our top 5 products by revenue this year?",
+  "Show revenue by category as a bar chart",
+  "Plot monthly revenue trend for the last year",
+  "Compare revenue and units sold by region",
 ] as const;
 
 export function ChatEmptyState({
@@ -24,10 +23,6 @@ export function ChatEmptyState({
 }: {
   onSuggestion: (suggestion: string) => void;
 }) {
-  const agentId = useAgentId();
-  const { data: agents } = useAgents();
-  const agentName = agents?.find((agent) => agent.id === agentId)?.name;
-
   return (
     <Empty className="flex-none border-none">
       <EmptyHeader>
@@ -38,11 +33,11 @@ export function ChatEmptyState({
         <EmptyDescription>
           You're talking to{" "}
           <span className="font-medium text-primary-foreground">
-            {agentName ?? agentId}.
+            {agentName}.
           </span>
         </EmptyDescription>
       </EmptyHeader>
-      <EmptyContent className="mt-2 max-w-xl">
+      <EmptyContent className="mt-2 max-w-3xl">
         <div className="flex flex-wrap justify-center gap-2">
           {SUGGESTIONS.map((suggestion, index) => (
             <Button

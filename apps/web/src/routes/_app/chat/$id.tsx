@@ -18,15 +18,15 @@ import {
 } from "@/components/ui/message-scroller";
 import { useResourceId } from "@/hooks/use-resource-id";
 import { threadMessagesQueryOptions } from "@/hooks/use-thread-messages";
+import { agentId } from "@/lib/agent";
 import { toFileList } from "@/lib/file-list";
 import { takePendingFiles } from "@/lib/pending-files";
 import { takePendingMessage } from "@/lib/pending-message";
 
 export const Route = createFileRoute("/_app/chat/$id")({
-  loaderDeps: ({ search }) => ({ agentId: search.agent }),
-  loader: async ({ context, params, deps }) => {
+  loader: async ({ context, params }) => {
     await context.queryClient.ensureQueryData(
-      threadMessagesQueryOptions(deps.agentId, params.id),
+      threadMessagesQueryOptions(agentId, params.id),
     );
   },
   component: ChatPage,
@@ -39,7 +39,6 @@ function ChatPage() {
 }
 
 function ChatThread({ threadId }: { threadId: string }) {
-  const { agent: agentId } = Route.useSearch();
   const { data: initialMessages } = useSuspenseQuery(
     threadMessagesQueryOptions(agentId, threadId),
   );
@@ -59,7 +58,7 @@ function ChatThread({ threadId }: { threadId: string }) {
           },
         }),
       }),
-    [threadId, resourceId, agentId],
+    [threadId, resourceId],
   );
 
   const { messages, sendMessage, status, stop, error, regenerate } = useChat({

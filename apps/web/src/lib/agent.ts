@@ -1,1 +1,2 @@
-export const defaultAgentId = "weatherAgent";
+export const agentId = "threadline-analyst";
+export const agentName = "Threadline Analyst";

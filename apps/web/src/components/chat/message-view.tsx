@@ -2,6 +2,7 @@ import type { DynamicToolUIPart, ToolUIPart, UIMessage } from "ai";
 import { Copy, ThumbsDown, ThumbsUp } from "lucide-react";
 import { MessageInspector } from "@/components/chat/message-inspector";
 import { Response } from "@/components/chat/response";
+import { ToolChart, type ToolChartSpec } from "@/components/chat/tool-chart";
 import { TextShimmer } from "@/components/loading-ui/text-shimmer";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
 import { Message, MessageContent } from "@/components/ui/message";
@@ -40,7 +41,7 @@ export function MessageView({
     return (
       <Message align="end">
         <MessageContent>
-          <Bubble align="end" variant="default">
+          <Bubble align="end" variant="secondary">
             <BubbleContent>
               {textParts.map((part, index) => (
                 <Response key={`${message.id}-text-${index}`}>
@@ -58,6 +59,13 @@ export function MessageView({
     .filter(isReasoningPart)
     .map((part) => part.text);
   const tools = message.parts.filter(isToolPart);
+  const charts = tools
+    .filter(
+      (part) =>
+        toolName(part) === "renderChartTool" &&
+        part.state === "output-available",
+    )
+    .map((part) => part.output as ToolChartSpec);
   const hasText = textParts.some((part) => part.text.trim().length > 0);
   const runningTool = tools.find(
     (part) =>
@@ -91,37 +99,39 @@ export function MessageView({
                   : "Thinking…"}
               </TextShimmer>
             )}
-
-            {hasText && !isStreaming && (
-              <div className="flex translate-y-0 opacity-100 transition-[opacity,transform] duration-150 ease-out starting:translate-y-1 starting:opacity-0 motion-reduce:duration-0">
-                <Tooltip>
-                  <TooltipTrigger
-                    render={<Button variant="ghost" size="icon-sm" />}
-                  >
-                    <Copy className="size-4 text-transparent transition-colors group-hover:text-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>Copy</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger
-                    render={<Button variant="ghost" size="icon-sm" />}
-                  >
-                    <ThumbsUp className="size-4 text-transparent transition-colors group-hover:text-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>Good response</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger
-                    render={<Button variant="ghost" size="icon-sm" />}
-                  >
-                    <ThumbsDown className="size-4 text-transparent transition-colors group-hover:text-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>Bad response</TooltipContent>
-                </Tooltip>
-              </div>
-            )}
           </BubbleContent>
         </Bubble>
+        {charts.map((spec, index) => (
+          <ToolChart key={`${message.id}-chart-${index}`} spec={spec} />
+        ))}
+        {hasText && !isStreaming && (
+          <div className="flex starting:translate-y-1 translate-y-0 opacity-100 starting:opacity-0 transition-[opacity,transform] duration-150 ease-out motion-reduce:duration-0">
+            <Tooltip>
+              <TooltipTrigger
+                render={<Button variant="ghost" size="icon-sm" />}
+              >
+                <Copy className="size-4 text-transparent transition-colors group-hover:text-foreground" />
+              </TooltipTrigger>
+              <TooltipContent>Copy</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger
+                render={<Button variant="ghost" size="icon-sm" />}
+              >
+                <ThumbsUp className="size-4 text-transparent transition-colors group-hover:text-foreground" />
+              </TooltipTrigger>
+              <TooltipContent>Good response</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger
+                render={<Button variant="ghost" size="icon-sm" />}
+              >
+                <ThumbsDown className="size-4 text-transparent transition-colors group-hover:text-foreground" />
+              </TooltipTrigger>
+              <TooltipContent>Bad response</TooltipContent>
+            </Tooltip>
+          </div>
+        )}
       </MessageContent>
     </Message>
   );

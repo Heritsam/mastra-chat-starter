@@ -13,7 +13,11 @@ export function Response({
       components={{
         ul: ({ children }) => <ul className="list-disc">{children}</ul>,
       }}
-      animated={{ animation: "blurIn" }}
+      animated={{
+        animation: "blurIn",
+        duration: 250,
+        easing: "ease-out",
+      }}
       isAnimating={isStreaming}
       className={cn(
         "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p+table]:mt-4 [&_table+p]:mt-4",

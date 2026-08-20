@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.18",
+    "@repo/db": "workspace:*",
     "@mastra/ai-sdk": "^1.9.0",
     "@mastra/core": "^1.60.0",
     "@mastra/duckdb": "^1.6.2",
@@ -31,6 +32,7 @@
     "@mastra/memory": "^1.27.0",
     "@mastra/observability": "^1.17.1",
     "@mastra/pg": "^1.21.0",
+    "drizzle-orm": "^0.45.1",
     "hono": "^4.12.31",
     "zod": "^4"
   }

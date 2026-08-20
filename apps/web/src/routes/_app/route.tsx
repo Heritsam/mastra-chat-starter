@@ -1,15 +1,8 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { z } from "zod";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import { defaultAgentId } from "@/lib/agent";
-
-const searchSchema = z.object({
-  agent: z.string().catch(defaultAgentId),
-});
 
 export const Route = createFileRoute("/_app")({
-  validateSearch: searchSchema,
   component: AppLayout,
 });
 
@@ -23,7 +16,7 @@ function AppLayout() {
           <SidebarTrigger />
 
           <div className="flex items-center gap-2">
-            <span className="font-medium text-sm">Agent Tester</span>
+            <span className="font-medium text-sm">Threadline Analyst</span>
           </div>
         </header>
 
